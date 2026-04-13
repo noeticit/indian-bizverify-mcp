@@ -1,0 +1,40 @@
+{
+  "name": "indian-bizverify-mcp",
+  "version": "1.0.0",
+  "description": "MCP Server for Indian business verification",
+  "author": "Ideople <hello@ideople.ai>",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "indian-bizverify-mcp": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/cli.ts",
+    "start": "node dist/cli.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "deploy": "npm run build && sam build && sam deploy",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.10.0",
+    "@aws-sdk/client-dynamodb": "^3.600.0",
+    "axios": "^1.7.0",
+    "lru-cache": "^11.0.0",
+    "playwright": "^1.44.0",
+    "playwright-aws-lambda": "^0.10.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.0",
+    "@types/node": "^20.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  }
+}

@@ -1,0 +1,100 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Runtime: nodejs20.x
+    Architectures: [arm64]
+    Environment:
+      Variables:
+        NODE_ENV: production
+        LOG_LEVEL: info
+        MCA_API_KEY: !Ref McaApiKey
+        DATA_GOV_API_KEY: !Ref DataGovApiKey
+        KARZA_API_KEY: !Ref KarzaApiKey
+        CACHE_TABLE_NAME: !Ref CacheTable
+        REGION: !Ref AWS::Region
+
+Parameters:
+  McaApiKey:
+    Type: String
+    Default: ""
+    NoEcho: true
+  DataGovApiKey:
+    Type: String
+    Default: ""
+    NoEcho: true
+  KarzaApiKey:
+    Type: String
+    Default: ""
+    NoEcho: true
+
+Resources:
+
+  BizVerifyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: indian-bizverify-mcp
+      Handler: dist/index.handler
+      CodeUri: .
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CacheTable
+      Events:
+        McpAny:
+          Type: HttpApi
+          Properties:
+            Path: /mcp
+            Method: ANY
+            ApiId: !Ref Api
+        McpProxy:
+          Type: HttpApi
+          Properties:
+            Path: /mcp/{proxy+}
+            Method: ANY
+            ApiId: !Ref Api
+        Health:
+          Type: HttpApi
+          Properties:
+            Path: /health
+            Method: GET
+            ApiId: !Ref Api
+
+  Api:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: prod
+      CorsConfiguration:
+        AllowOrigins: ["*"]
+        AllowMethods: [GET, POST, OPTIONS]
+        AllowHeaders: [Content-Type, Authorization, X-Session-Id]
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: 50
+        ThrottlingRateLimit: 20
+
+  CacheTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: bizverify-cache
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - { AttributeName: pk, AttributeType: S }
+      KeySchema:
+        - { AttributeName: pk, KeyType: HASH }
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true
+
+  Logs:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /aws/lambda/indian-bizverify-mcp
+      RetentionInDays: 7
+
+Outputs:
+  McpUrl:
+    Value: !Sub "https://${Api}.execute-api.${AWS::Region}.amazonaws.com/prod/mcp"
+  HealthUrl:
+    Value: !Sub "https://${Api}.execute-api.${AWS::Region}.amazonaws.com/prod/health"

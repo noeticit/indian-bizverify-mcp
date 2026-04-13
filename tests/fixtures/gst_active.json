@@ -1,0 +1,15 @@
+{
+  "lgnm": "ACME TECHNOLOGIES PRIVATE LIMITED",
+  "tradeNam": "Acme Tech",
+  "sts": "ACT",
+  "dty": "Regular",
+  "ctb": "Private Limited Company",
+  "rgdt": "01/07/2017",
+  "pradr": {
+    "bnm": "Plot 42",
+    "st": "MIDC Industrial Area",
+    "loc": "Pune",
+    "dst": "Pune",
+    "pncd": "411018"
+  }
+}

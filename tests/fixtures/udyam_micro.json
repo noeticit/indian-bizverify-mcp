@@ -1,0 +1,23 @@
+{
+  "enterprise_name": "MICRO ENTERPRISE SOLUTIONS",
+  "owner_name": "RAJESH KUMAR",
+  "category": "Micro",
+  "activity_type": "Service",
+  "nic_code": "62011",
+  "nic_description": "Computer programming activities",
+  "date_of_registration": "2021-03-15",
+  "date_of_commencement": "2021-04-01",
+  "pan": "ABCDE1234F",
+  "gstin": "27ABCDE1234F1Z5",
+  "social_category": "General",
+  "district": "Pune",
+  "state": "Maharashtra",
+  "status": "Active",
+  "employees": {
+    "male": 3,
+    "female": 2,
+    "total": 5
+  },
+  "investment_in_plant_machinery_inr": 500000,
+  "turnover_inr": 2500000
+}
